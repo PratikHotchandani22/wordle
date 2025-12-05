@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import GameBoard from './components/GameBoard';
 import Keyboard from './components/Keyboard';
 import Modal from './components/Modal';
-import { LOVE_WORDS, MAX_GUESSES, START_DATE, WORD_LENGTH } from './data/words';
+import { MAX_GUESSES, START_DATE, WORD_LENGTH } from './data/words';
+import { RESET_DATES, RESET_TODAY } from './config';
 import type { GameStatus } from './types';
-import { formatDisplayDate, toISODate } from './utils/date';
+import { toISODate } from './utils/date';
 import { buildKeyboardState, isAlphaWord } from './utils/game';
 import { getTodayPuzzle } from './utils/getTodayPuzzle';
 import { loadGameState, saveGameState, storageKeyForDate } from './utils/storage';
@@ -13,13 +14,22 @@ import './App.css';
 const Game = () => {
   const today = useMemo(() => new Date(), []);
   const todayIso = useMemo(() => toISODate(today), [today]);
+  const shouldResetToday = useMemo(
+    () => RESET_TODAY || RESET_DATES.includes(todayIso),
+    [todayIso],
+  );
   const puzzleResult = useMemo(() => getTodayPuzzle(today), [today]);
   const solution = puzzleResult.puzzle?.word ?? '';
   const storageKey = storageKeyForDate(todayIso);
 
   const initialState = useMemo(
-    () => loadGameState(storageKey) ?? { guesses: [], status: 'in_progress' as GameStatus },
-    [storageKey],
+    () => {
+      if (shouldResetToday) {
+        localStorage.removeItem(storageKey);
+      }
+      return loadGameState(storageKey) ?? { guesses: [], status: 'in_progress' as GameStatus };
+    },
+    [shouldResetToday, storageKey],
   );
 
   const [guesses, setGuesses] = useState<string[]>(initialState.guesses);
@@ -128,26 +138,13 @@ const Game = () => {
     puzzleResult.status === 'not_started'
       ? `No puzzle yet. First puzzle unlocks on ${START_DATE}.`
       : puzzleResult.status === 'out_of_words'
-        ? 'No puzzle configured for today. Add another word to LOVE_WORDS.'
+        ? 'No puzzle configured for today. Add another word to the list.'
         : null;
 
   return (
     <div className="page">
       <header className="hero">
-        <div>
-          <p className="eyebrow">Today&apos;s little love puzzle 💕</p>
-          <h1>Relationship Wordle</h1>
-          <p className="date">{formatDisplayDate(today)}</p>
-        </div>
-        <div className="meta">
-          <p>
-            Start date: <strong>{START_DATE}</strong>
-          </p>
-          <p>
-            Word #{puzzleResult.status === 'available' ? puzzleResult.dayIndex + 1 : '—'} of{' '}
-            {LOVE_WORDS.length}
-          </p>
-        </div>
+        <h1>Bub&apos;s Wordle &lt;3</h1>
       </header>
 
       {helperMessage ? (
