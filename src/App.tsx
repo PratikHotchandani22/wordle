@@ -37,6 +37,7 @@ const Game = () => {
   const [currentGuess, setCurrentGuess] = useState('');
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(initialState.status !== 'in_progress');
+  const [showWelcome, setShowWelcome] = useState(true);
 
   useEffect(() => {
     saveGameState(storageKey, { guesses, status });
@@ -183,6 +184,19 @@ const Game = () => {
         title={modalTitle}
         message={modalMessage}
         note={puzzleResult.puzzle?.note}
+      />
+
+      <Modal
+        open={showWelcome}
+        onClose={() => setShowWelcome(false)}
+        title="How to play"
+        message={
+          <>
+            Hi bubs. I made something for you. I know you like puzzles and I just wanted to do
+            something nice for you. So here is a wordle game for you. You have to guess words that
+            are relevant to us. Love you!! &lt;3
+          </>
+        }
       />
     </div>
   );

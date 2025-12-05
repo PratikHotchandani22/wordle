@@ -5,5 +5,5 @@ export const WORD_LENGTH = 5;
 export const MAX_GUESSES = 6;
 
 export const LOVE_WORDS: LoveWord[] = [
-  { word: 'PIMPI', note: 'Your laugh makes every day brighter.' }
+  { word: 'PIMPI', note: 'i hope tera lip wala pimpi chale jaye jaldiiii <3' }
 ];

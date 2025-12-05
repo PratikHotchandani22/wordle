@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react';
+
 type Props = {
   title: string;
-  message: string;
+  message: ReactNode;
   note?: string;
   onClose: () => void;
   open: boolean;
