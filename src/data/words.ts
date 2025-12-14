@@ -1,6 +1,6 @@
 import type { LoveWord } from '../types';
 
-export const START_DATE = '2025-12-07';
+export const START_DATE = '2025-12-14';
 export const WORD_LENGTH = 7;
 export const MAX_GUESSES = 6;
 
